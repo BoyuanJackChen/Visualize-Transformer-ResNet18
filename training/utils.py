@@ -76,6 +76,23 @@ def get_data_loader(args, train_kwargs, test_kwargs):
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
+    elif args.dataset=="CIFAR-100":
+        # Normalization parameters from https://github.com/kuangliu/pytorch-cifar/issues/19
+        transform_train = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+        ])
+        transform_test = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+        ])
+        dataset1 = datasets.CIFAR100('../data', train=True, download=True,
+                                    transform=transform_train)  # 50k
+        dataset2 = datasets.CIFAR100('../data', train=False,
+                                    transform=transform_test)  # 10k
+        train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
+        test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
+
     elif args.dataset=="MNIST":
         transform_train = transforms.Compose([
             transforms.ToTensor(),
@@ -107,32 +124,8 @@ def get_data_loader(args, train_kwargs, test_kwargs):
                                     transform=transform_test)  # 10k
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
-
     return train_loader, test_loader
 
-
-def evaluate_model(model, data_loader, loss_history):
-    model.eval()
-
-    total_samples = len(data_loader.dataset)
-    correct_samples = 0
-    total_loss = 0
-
-    with torch.no_grad():
-        for data, target in data_loader:
-            output = F.log_softmax(model(data), dim=1)
-            loss = F.nll_loss(output, target, reduction='sum')
-            _, pred = torch.max(output, dim=1)
-
-            total_loss += loss.item()
-            correct_samples += pred.eq(target).sum()
-
-    avg_loss = total_loss / total_samples
-    loss_history.append(avg_loss)
-    print('\nAverage test loss: ' + '{:.4f}'.format(avg_loss) +
-          '  Accuracy:' + '{:5}'.format(correct_samples) + '/' +
-          '{:5}'.format(total_samples) + ' (' +
-          '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
 
 if __name__=='__main__':
