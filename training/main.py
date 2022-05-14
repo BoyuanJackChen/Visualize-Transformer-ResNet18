@@ -11,21 +11,29 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
 parser.add_argument('--dataset', type=str, default="CIFAR-100")
 parser.add_argument('--epochs', type=int, default=1000)
-parser.add_argument('--checkpoint', type=int, default=100)
+parser.add_argument('--checkpoint', type=int, default=2)
 parser.add_argument('--load_checkpoint', type=str, default=None)
+parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
+
+# General
+parser.add_argument('--n_epochs', type=int, default='50')
+parser.add_argument('--lr', default=1e-3, type=float, help='learning rate') # resnets.. 1e-3, Vit..1e-4?
 parser.add_argument('--train_batch', type=int, default=100)
 parser.add_argument('--test_batch', type=int, default=1000)
 
-parser.add_argument('--lr', default=1e-3, type=float, help='learning rate') # resnets.. 1e-3, Vit..1e-4?
-parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
+# ViT
+parser.add_argument('--dimhead', default="64", type=int)
+
+# CNN
+parser.add_argument('--convkernel', default='8', type=int)
+
+# Data Augmentation
 parser.add_argument('--aug', action='store_true', help='use randomaug')
 parser.add_argument('--amp', action='store_true', help='enable AMP training')
 parser.add_argument('--mixup', action='store_true', help='add mixup augumentations')
 parser.add_argument('--bs', default='256')
 parser.add_argument('--size', default="32")
-parser.add_argument('--n_epochs', type=int, default='50')
-parser.add_argument('--dimhead', default="512", type=int)
-parser.add_argument('--convkernel', default='8', type=int)
+
 FLAGS = parser.parse_args()
 
 
@@ -53,20 +61,28 @@ def main(args):
 
 
     print('==> Loading Dataset..')
+    # patch_size is the number of pixels for each patch's width and height. Not patch number.
     if args.dataset=="CIFAR-10":
         image_size = 32
         patch_size = 8
         num_classes = 10
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261)),
+        ])
     elif args.dataset=="CIFAR-100":
         image_size = 32
         patch_size = 8
         num_classes = 100
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+        ])
     elif args.dataset=="MNIST" or args.dataset=="FashionMNIST":
         image_size = 28
         patch_size = 7
         num_classes = 10
     
-
 
     print('==> Building model..')
     if args.model=='res18':
@@ -98,15 +114,15 @@ def main(args):
         print('Epoch took:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 
         if epoch % args.checkpoint == 0:
-            loss_list = np.concatenate((np.array([train_loss_history]), np.array([test_loss_history])), axis=0)
-            loss_list = np.concatenate((loss_list, np.array([test_accuracy_history])), axis=0)
             torch.save({
                 'epoch': epoch,
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
-                'loss': loss_list,
+                'train_loss': train_loss_history,
+                'test_loss': test_loss_history,
+                'accuracy': test_accuracy_history,
             }, PATH + f"/e{epoch}_b{args.train_batch}_lr{args.lr}.pt")
-            print(f"Checkpoint saved at epoch {epoch}")
+            print(f"Checkpoint e{epoch}_b{args.train_batch}_lr{args.lr}.pt saved")
 
 
 

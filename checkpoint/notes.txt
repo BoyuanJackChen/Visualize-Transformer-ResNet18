@@ -1,0 +1,6 @@
+
+ViT-B_16_fold0.pth is downloaded from 
+https://www.kaggle.com/datasets/piantic/cassava-vit-b-16, 
+used in 
+https://www.kaggle.com/code/piantic/vision-transformer-vit-visualize-attention-map/notebook
+

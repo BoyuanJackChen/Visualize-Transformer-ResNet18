@@ -58,6 +58,7 @@ def analyze_checkpoint(path):
     accuracy_list = loss[2]
     print(np.amax(accuracy_list))
 
+
 def get_data_loader(args, train_kwargs, test_kwargs):
     if args.dataset=="CIFAR-10":
         # Normalization parameters from https://github.com/kuangliu/pytorch-cifar/issues/19
