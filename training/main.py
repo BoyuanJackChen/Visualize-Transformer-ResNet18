@@ -118,8 +118,8 @@ def main(args):
                 'train_loss': train_loss_history,
                 'test_loss': test_loss_history,
                 'accuracy': test_accuracy_history,
-            }, PATH + f"/e{epoch}_b{args.train_batch}_lr{args.lr}.pt")
-            print(f"Checkpoint e{epoch}_b{args.train_batch}_lr{args.lr}.pt saved")
+            }, PATH + f"/{args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt")
+            print(f"Checkpoint {args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt saved")
 
 
 
