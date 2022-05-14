@@ -142,10 +142,10 @@ def get_data_loader(args, train_kwargs, test_kwargs):
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
                                  0.229, 0.224, 0.225]),
         ])
-        dataset1 = datasets.MNIST('../dataImageNet1K', train=True, download=False,
-                                  transform=transform)
-        dataset2 = datasets.MNIST('../dataImageNet1K', train=False, download=False,
-                                  transform=transform)
+        dataset1 = datasets.ImageFolder(
+            root='../dataImageNet1K/train', transform=transform)
+        dataset2 = datasets.ImageFolder(
+            root='../dataImageNet1K/val', transform=transform)
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
     return train_loader, test_loader
