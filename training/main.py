@@ -10,14 +10,13 @@ import torch.nn.functional as F
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
 parser.add_argument('--dataset', type=str, default="CIFAR-100")
-parser.add_argument('--epochs', type=int, default=1000)
-parser.add_argument('--checkpoint', type=int, default=2)
+parser.add_argument('--epochs', type=int, default=10000)
+parser.add_argument('--checkpoint', type=int, default=500)
 parser.add_argument('--load_checkpoint', type=str, default=None)
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
 
 # General
-parser.add_argument('--n_epochs', type=int, default='50')
-parser.add_argument('--lr', default=1e-3, type=float, help='learning rate') # resnets.. 1e-3, Vit..1e-4?
+parser.add_argument('--lr', default=1e-4, type=float, help='learning rate')  # resnets.. 1e-3, Vit..1e-4?
 parser.add_argument('--train_batch', type=int, default=100)
 parser.add_argument('--test_batch', type=int, default=1000)
 
@@ -53,10 +52,13 @@ def main(args):
                        'shuffle': True}
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
+
     # Checkpoint saving and loading
     PATH = "../checkpoint/"
     if not os.path.exists(PATH):
         os.makedirs(PATH)
+
+    # Function from utils. Normalization is implemented
     train_loader, test_loader = get_data_loader(args, train_kwargs, test_kwargs)
 
 
@@ -66,23 +68,18 @@ def main(args):
         image_size = 32
         patch_size = 8
         num_classes = 10
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261)),
-        ])
     elif args.dataset=="CIFAR-100":
         image_size = 32
         patch_size = 8
         num_classes = 100
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
-        ])
     elif args.dataset=="MNIST" or args.dataset=="FashionMNIST":
         image_size = 28
         patch_size = 7
         num_classes = 10
-    
+    elif args.dataset=="ImageNet_1k":
+        image_size = 224
+        patch_size = 56
+        num_classes = 1000
 
     print('==> Building model..')
     if args.model=='res18':

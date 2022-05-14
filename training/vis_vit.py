@@ -6,11 +6,12 @@ import os
 from torch import optim, nn, einsum
 import torch.backends.cudnn as cudnn
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
-parser.add_argument('--dataset', type=str, default="CIFAR-10")
-parser.add_argument('--load_checkpoint', type=str, default=None)
+parser.add_argument('--dataset', type=str, default="CIFAR-100")
+parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/e2_b100_lr0.001.pt")
 
 # General
 parser.add_argument('--train_batch', type=int, default=100)
@@ -36,24 +37,43 @@ def main(args):
         image_size = 32
         patch_size = 8
         num_classes = 10
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261)),
+        ])
     elif args.dataset=="CIFAR-100":
         image_size = 32
         patch_size = 8
         num_classes = 100
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+        ])
     elif args.dataset=="MNIST" or args.dataset=="FashionMNIST":
         image_size = 28
         patch_size = 7
         num_classes = 10
+
+    # Initialize model
     model = ViT(image_size=image_size, patch_size=patch_size, num_classes=num_classes, dim=int(args.dimhead),
                     depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+    # Load checkpoint
+    if args.load_checkpoint is not None:
+        checkpoint = torch.load(args.load_checkpoint)
+        model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
 
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
-    ])
+    test_kwargs = {'batch_size': 1, 'shuffle': False}
+    test_ds = datasets.CIFAR10('../data', train=False, download=True, transform=transform)
+    test_loader = torch.utils.data.DataLoader(test_ds, **test_kwargs)
+    for i, (data, target) in enumerate(test_loader):
+        if i!=10:
+            continue
+        image = data[0]
+        print(image.shape)
 
+        plt.imshow(image.permute(1, 2, 0))
+        plt.show()
 
 
 if __name__=='__main__':

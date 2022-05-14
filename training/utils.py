@@ -125,6 +125,17 @@ def get_data_loader(args, train_kwargs, test_kwargs):
                                     transform=transform_test)  # 10k
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
+
+    elif args.dataset=="ImageNet_1k":
+        transform = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+        dataset1 = 0
+        dataset2 = 0
+        train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
+        test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
     return train_loader, test_loader
 
 
