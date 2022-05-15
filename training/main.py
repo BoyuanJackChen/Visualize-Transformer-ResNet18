@@ -9,10 +9,10 @@ import torch.nn.functional as F
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
-parser.add_argument('--dataset', type=str, default="CIFAR-100")
+parser.add_argument('--dataset', type=str, default="CIFAR-10")
 parser.add_argument('--epochs', type=int, default=2000)
 parser.add_argument('--checkpoint', type=int, default=100)
-parser.add_argument('--load_checkpoint', type=str, default=None)
+parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/CIFAR-10_e100_b100_lr0.0001.pt")
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
 
 # General
@@ -99,11 +99,19 @@ def main(args):
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     criterion = nn.CrossEntropyLoss()
 
-
+    start_epoch = 1
+    train_loss_history, test_loss_history, test_accuracy_history = np.array([]), np.array([]), np.array([])
+    if args.load_checkpoint is not None:
+        checkpoint = torch.load(args.load_checkpoint)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        start_epoch = checkpoint['epoch']+1
+        train_loss_history = checkpoint['train_loss']
+        test_loss_history = checkpoint['test_loss']
+        test_accuracy_history = checkpoint['accuracy']
 
     print('==> Training starts')
-    train_loss_history, test_loss_history, test_accuracy_history = np.array([]), np.array([]), np.array([])
-    for epoch in range(1, args.epochs + 1):
+    for epoch in range(start_epoch, args.epochs + 1):
         start_time = time.time()
         print('Epoch:', epoch)
         train_epoch(model, optimizer, criterion, train_loader, train_loss_history)
