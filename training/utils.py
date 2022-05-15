@@ -7,15 +7,19 @@ from torchvision import datasets, transforms
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
+
 def plot_losses(train_loss_list, test_loss_list):
-    plt.plot(range(len(train_loss_list)),train_loss_list,'-',linewidth=3,label='Train error')
-    plt.plot(range(len(test_loss_list)), test_loss_list, '-',linewidth=3,label='Test error')
+    plt.plot(range(len(train_loss_list)), train_loss_list,
+             '-', linewidth=3, label='Train error')
+    plt.plot(range(len(test_loss_list)), test_loss_list,
+             '-', linewidth=3, label='Test error')
     plt.xlabel('epoch')
     plt.ylabel('loss')
     plt.grid(True)
     plt.legend()
     plt.show()
     return
+
 
 def format_time(seconds):
     days = int(seconds / 3600/24)
@@ -48,6 +52,7 @@ def format_time(seconds):
         f = '0ms'
     return f
 
+
 def analyze_checkpoint(path):
     checkpoint = torch.load(path)
     epoch = checkpoint['epoch']
@@ -60,15 +65,17 @@ def analyze_checkpoint(path):
 
 
 def get_data_loader(args, train_kwargs, test_kwargs):
-    if args.dataset=="CIFAR-10":
+    if args.dataset == "CIFAR-10":
         # Normalization parameters from https://github.com/kuangliu/pytorch-cifar/issues/19
         transform_train = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261)),
+            transforms.Normalize((0.4914, 0.4822, 0.4465),
+                                 (0.247, 0.243, 0.261)),
         ])
         transform_test = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261)),
+            transforms.Normalize((0.4914, 0.4822, 0.4465),
+                                 (0.247, 0.243, 0.261)),
         ])
         dataset1 = datasets.CIFAR10('../data', train=True, download=True,
                                     transform=transform_train)  # 50k
@@ -77,24 +84,26 @@ def get_data_loader(args, train_kwargs, test_kwargs):
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
-    elif args.dataset=="CIFAR-100":
+    elif args.dataset == "CIFAR-100":
         # Normalization parameters from https://github.com/kuangliu/pytorch-cifar/issues/19
         transform_train = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+            transforms.Normalize((0.5071, 0.4867, 0.4408),
+                                 (0.2675, 0.2565, 0.2761)),
         ])
         transform_test = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+            transforms.Normalize((0.5071, 0.4867, 0.4408),
+                                 (0.2675, 0.2565, 0.2761)),
         ])
         dataset1 = datasets.CIFAR100('../data', train=True, download=True,
-                                    transform=transform_train)  # 50k
+                                     transform=transform_train)  # 50k
         dataset2 = datasets.CIFAR100('../data', train=False,
-                                    transform=transform_test)  # 10k
+                                     transform=transform_test)  # 10k
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
-    elif args.dataset=="MNIST":
+    elif args.dataset == "MNIST":
         transform_train = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,)),
@@ -104,13 +113,13 @@ def get_data_loader(args, train_kwargs, test_kwargs):
             transforms.Normalize((0.1307,), (0.3081,)),
         ])
         dataset1 = datasets.MNIST('../data', train=True, download=True,
-                                    transform=transform_train)  # 60k
+                                  transform=transform_train)  # 60k
         dataset2 = datasets.MNIST('../data', train=False,
-                                    transform=transform_test)  # 10k
+                                  transform=transform_test)  # 10k
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
-    elif args.dataset=="FashionMNIST":
+    elif args.dataset == "FashionMNIST":
         transform_train = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.2859,), (0.3530,)),
@@ -120,26 +129,28 @@ def get_data_loader(args, train_kwargs, test_kwargs):
             transforms.Normalize((0.2859,), (0.3530,)),
         ])
         dataset1 = datasets.MNIST('../data', train=True, download=True,
-                                    transform=transform_train)  # 60k
+                                  transform=transform_train)  # 60k
         dataset2 = datasets.MNIST('../data', train=False,
-                                    transform=transform_test)  # 10k
+                                  transform=transform_test)  # 10k
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
-    elif args.dataset=="ImageNet_1k":
+    elif args.dataset == "ImageNet_1k":
         transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
+                                 0.229, 0.224, 0.225]),
         ])
-        dataset1 = 0
-        dataset2 = 0
+        dataset1 = datasets.ImageFolder(
+            root='../dataImageNet1K/train', transform=transform)
+        dataset2 = datasets.ImageFolder(
+            root='../dataImageNet1K/val', transform=transform)
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
     return train_loader, test_loader
 
 
-
-if __name__=='__main__':
+if __name__ == '__main__':
     path = "../checkpoints/Mixup/lr1e-3/e300_b64_lr0.001.pt"
     analyze_checkpoint(path)
