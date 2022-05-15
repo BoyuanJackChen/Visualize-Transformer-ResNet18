@@ -128,11 +128,6 @@ def get_data_loader(args, train_kwargs, test_kwargs):
         ]
         transform_train = transforms.Compose(transf_val)
         transform_test = transforms.Compose(transf_val)
-        if args.transform == "RandomAffine":
-            transform_train = transform_train.RandomAffine(
-                0, translate=(0.3, 0.5))
-            transform_test = transform_test.RandomAffine(
-                0, translate=(0.3, 0.5))
         dataset1 = datasets.MNIST('../data', train=True, download=True,
                                   transform=transform_train)  # 60k
         dataset2 = datasets.MNIST('../data', train=False,
