@@ -104,14 +104,16 @@ def get_data_loader(args, train_kwargs, test_kwargs):
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     elif args.dataset == "MNIST":
-        transform_train = transforms.Compose([
+        transf_val = [
             transforms.ToTensor(),
-            transforms.Normalize((0.1307,), (0.3081,)),
-        ])
-        transform_test = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.1307,), (0.3081,)),
-        ])
+            transforms.Normalize((0.1307,), (0.3081,))
+        ]
+        if args.transform == "RandomAffine":
+            transf_val += [transforms.RandomAffine(
+                0, translate=(0.3, 0.5))]
+        transform_train = transforms.Compose(transf_val)
+        transform_test = transforms.Compose(transf_val)
+
         dataset1 = datasets.MNIST('../data', train=True, download=True,
                                   transform=transform_train)  # 60k
         dataset2 = datasets.MNIST('../data', train=False,
@@ -120,14 +122,20 @@ def get_data_loader(args, train_kwargs, test_kwargs):
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     elif args.dataset == "FashionMNIST":
-        transform_train = transforms.Compose([
+        transf_val = [
             transforms.ToTensor(),
             transforms.Normalize((0.2859,), (0.3530,)),
-        ])
-        transform_test = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.2859,), (0.3530,)),
-        ])
+        ]
+        if args.transform == "RandomAffine":
+            transf_val += [transforms.RandomAffine(
+                0, translate=(0.3, 0.5))]
+        transform_train = transforms.Compose(transf_val)
+        transform_test = transforms.Compose(transf_val)
+        if args.transform == "RandomAffine":
+            transform_train = transform_train.RandomAffine(
+                0, translate=(0.3, 0.5))
+            transform_test = transform_test.RandomAffine(
+                0, translate=(0.3, 0.5))
         dataset1 = datasets.MNIST('../data', train=True, download=True,
                                   transform=transform_train)  # 60k
         dataset2 = datasets.MNIST('../data', train=False,

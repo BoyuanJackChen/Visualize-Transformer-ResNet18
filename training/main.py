@@ -10,13 +10,18 @@ import torch.nn.functional as F
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
 parser.add_argument('--dataset', type=str, default="CIFAR-10")
+# --transform=RandomAffine for random translate
+parser.add_argument('--transform', type=str, default="None")
 parser.add_argument('--epochs', type=int, default=2000)
 parser.add_argument('--checkpoint', type=int, default=100)
-parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/CIFAR-10_e100_b100_lr0.0001.pt")
-parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
+parser.add_argument('--load_checkpoint', type=str,
+                    default="../checkpoint/CIFAR-10_e100_b100_lr0.0001.pt")
+parser.add_argument('--resume', '-r', action='store_true',
+                    help='resume from checkpoint')
 
 # General
-parser.add_argument('--lr', default=1e-4, type=float, help='learning rate')  # resnets.. 1e-3, Vit..1e-4?
+parser.add_argument('--lr', default=1e-4, type=float,
+                    help='learning rate')  # resnets.. 1e-3, Vit..1e-4?
 parser.add_argument('--train_batch', type=int, default=100)
 parser.add_argument('--test_batch', type=int, default=1000)
 
@@ -29,7 +34,8 @@ parser.add_argument('--convkernel', default='8', type=int)
 # Data Augmentation
 parser.add_argument('--aug', action='store_true', help='use randomaug')
 parser.add_argument('--amp', action='store_true', help='enable AMP training')
-parser.add_argument('--mixup', action='store_true', help='add mixup augumentations')
+parser.add_argument('--mixup', action='store_true',
+                    help='add mixup augumentations')
 parser.add_argument('--bs', default='256')
 parser.add_argument('--size', default="32")
 
@@ -59,36 +65,36 @@ def main(args):
         os.makedirs(PATH)
 
     # Function from utils. Normalization is implemented
-    train_loader, test_loader = get_data_loader(args, train_kwargs, test_kwargs)
-
+    train_loader, test_loader = get_data_loader(
+        args, train_kwargs, test_kwargs)
 
     print('==> Loading Dataset..')
     # patch_size is the number of pixels for each patch's width and height. Not patch number.
-    if args.dataset=="CIFAR-10":
+    if args.dataset == "CIFAR-10":
         image_size = 32
         patch_size = 8
         num_classes = 10
-    elif args.dataset=="CIFAR-100":
+    elif args.dataset == "CIFAR-100":
         image_size = 32
         patch_size = 8
         num_classes = 100
-    elif args.dataset=="MNIST" or args.dataset=="FashionMNIST":
+    elif args.dataset == "MNIST" or args.dataset == "FashionMNIST":
         image_size = 28
         patch_size = 7
         num_classes = 10
-    elif args.dataset=="ImageNet_1k":
+    elif args.dataset == "ImageNet_1k":
         image_size = 224
         patch_size = 56
         num_classes = 1000
 
     print('==> Building model..')
-    if args.model=='res18':
+    if args.model == 'res18':
         model = ResNet18()
-    elif args.model=="vit":
+    elif args.model == "vit":
         from models.vit import ViT
         model = ViT(image_size=image_size, patch_size=patch_size, num_classes=num_classes, dim=int(args.dimhead),
                     depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-    elif args.model=="vit_small":
+    elif args.model == "vit_small":
         from models.vit_small import ViT
         model = ViT(image_size=image_size, patch_size=patch_size, num_classes=num_classes, dim=int(args.dimhead),
                     depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
@@ -100,7 +106,8 @@ def main(args):
     criterion = nn.CrossEntropyLoss()
 
     start_epoch = 1
-    train_loss_history, test_loss_history, test_accuracy_history = np.array([]), np.array([]), np.array([])
+    train_loss_history, test_loss_history, test_accuracy_history = np.array(
+        []), np.array([]), np.array([])
     if args.load_checkpoint is not None:
         checkpoint = torch.load(args.load_checkpoint)
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -114,9 +121,12 @@ def main(args):
     for epoch in range(start_epoch, args.epochs + 1):
         start_time = time.time()
         print('Epoch:', epoch)
-        train_epoch(model, optimizer, criterion, train_loader, train_loss_history)
-        evaluate_model(model, test_loader, test_loss_history, test_accuracy_history)
-        print('Epoch took:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
+        train_epoch(model, optimizer, criterion,
+                    train_loader, train_loss_history)
+        evaluate_model(model, test_loader, test_loss_history,
+                       test_accuracy_history)
+        print('Epoch took:', '{:5.2f}'.format(
+            time.time() - start_time), 'seconds')
 
         if epoch % args.checkpoint == 0:
             torch.save({
@@ -128,7 +138,6 @@ def main(args):
                 'accuracy': test_accuracy_history,
             }, PATH + f"/{args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt")
             print(f"Checkpoint {args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt saved")
-
 
 
 def train_epoch(model, optimizer, criterion, data_loader, loss_history):
@@ -154,7 +163,7 @@ def evaluate_model(model, data_loader, loss_history, accuracy_history):
     total_samples = len(data_loader.dataset)
     correct_samples = 0
     total_loss = 0
-    
+
     with torch.no_grad():
         for data, target in data_loader:
             output = F.log_softmax(model(data), dim=1)
@@ -173,6 +182,5 @@ def evaluate_model(model, data_loader, loss_history, accuracy_history):
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
 
-
-if __name__=="__main__":
+if __name__ == "__main__":
     main(FLAGS)
