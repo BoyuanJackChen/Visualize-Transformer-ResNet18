@@ -3,7 +3,7 @@
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu
 #SBATCH --time=8:00:00
-#SBATCH --mem=4GB
+#SBATCH --mem=10GB
 #SBATCH --cpus-per-task=4
 #SBATCH --job-name=ImageNet1K
 #SBATCH --output=ImageNet1K.out
