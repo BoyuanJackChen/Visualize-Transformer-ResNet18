@@ -71,9 +71,15 @@ def main(args):
             continue
         image = data[0]
         print(image.shape)
-
+        print(target)
         plt.imshow(image.permute(1, 2, 0))
         plt.show()
+
+        logits, att_mat = model(image.unsqueeze(0))
+        att_mat = torch.stack(att_mat).squeeze(1)
+        # Average the attention weights across all heads.
+        att_mat = torch.mean(att_mat, dim=1)
+
 
 
 if __name__=='__main__':
