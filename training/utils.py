@@ -126,9 +126,6 @@ def get_data_loader(args, train_kwargs, test_kwargs):
             transforms.ToTensor(),
             transforms.Normalize((0.2859,), (0.3530,)),
         ]
-        if args.transform == "RandomAffine":
-            transf_val += [transforms.RandomAffine(
-                0, translate=(0.3, 0.5))]
         transform_train = transforms.Compose(transf_val)
         transform_test = transforms.Compose(transf_val)
         if args.transform == "RandomAffine":
