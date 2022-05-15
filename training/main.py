@@ -10,8 +10,8 @@ import torch.nn.functional as F
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
 parser.add_argument('--dataset', type=str, default="CIFAR-100")
-parser.add_argument('--epochs', type=int, default=10000)
-parser.add_argument('--checkpoint', type=int, default=500)
+parser.add_argument('--epochs', type=int, default=2000)
+parser.add_argument('--checkpoint', type=int, default=100)
 parser.add_argument('--load_checkpoint', type=str, default=None)
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
 
