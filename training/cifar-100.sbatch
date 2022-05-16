@@ -7,4 +7,4 @@
 #SBATCH --job-name=cifar-100
 #SBATCH --output=cifar-100.out
 
-python3 main.py --dataset="CIFAR-100" --epochs=2000 --checkpoint=100 --load-checkpoint=None
+python3 main.py --dataset="CIFAR-100" --epochs=2000 --checkpoint=100
