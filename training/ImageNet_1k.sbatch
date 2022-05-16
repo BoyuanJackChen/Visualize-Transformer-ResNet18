@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
+#SBATCH --nodes=3
+#SBATCH --ntasks-per-node=2
 #SBATCH --gres=gpu
-#SBATCH --time=8:00:00
+#SBATCH --time=10:00:00
 #SBATCH --mem=10GB
 #SBATCH --cpus-per-task=4
 #SBATCH --job-name=ImageNet1K

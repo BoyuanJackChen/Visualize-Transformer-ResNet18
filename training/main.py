@@ -105,9 +105,12 @@ def main(args):
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     criterion = nn.CrossEntropyLoss()
 
+    model = model.to(device)
+
     start_epoch = 1
     train_loss_history, test_loss_history, test_accuracy_history = np.array(
         []), np.array([]), np.array([])
+    # remove this condition when making a new checkpoint
     if args.load_checkpoint is not None:
         checkpoint = torch.load(args.load_checkpoint)
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -116,14 +119,13 @@ def main(args):
         train_loss_history = checkpoint['train_loss']
         test_loss_history = checkpoint['test_loss']
         test_accuracy_history = checkpoint['accuracy']
-
     print('==> Training starts')
     for epoch in range(start_epoch, args.epochs + 1):
         start_time = time.time()
         print('Epoch:', epoch)
-        train_epoch(model, optimizer, criterion,
+        train_epoch(model, device, optimizer, criterion,
                     train_loader, train_loss_history)
-        evaluate_model(model, test_loader, test_loss_history,
+        evaluate_model(model, device, test_loader, test_loss_history,
                        test_accuracy_history)
         print('Epoch took:', '{:5.2f}'.format(
             time.time() - start_time), 'seconds')
@@ -140,11 +142,12 @@ def main(args):
             print(f"Checkpoint {args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt saved")
 
 
-def train_epoch(model, optimizer, criterion, data_loader, loss_history):
+def train_epoch(model, device, optimizer, criterion, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
     model.train()
 
     for i, (data, target) in enumerate(data_loader):
+        data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
         loss = criterion(output, target)
@@ -158,24 +161,25 @@ def train_epoch(model, optimizer, criterion, data_loader, loss_history):
             loss_history = np.append(loss_history, loss.item())
 
 
-def evaluate_model(model, data_loader, loss_history, accuracy_history):
+def evaluate_model(model, device, data_loader, loss_history, accuracy_history):
     model.eval()
     total_samples = len(data_loader.dataset)
     correct_samples = 0
     total_loss = 0
 
     with torch.no_grad():
-        for data, target in data_loader:
+        for i, (data, target) in enumerate(data_loader):
+            data, target = data.to(device), target.to(device)
             output = F.log_softmax(model(data), dim=1)
             loss = F.nll_loss(output, target, reduction='sum')
             _, pred = torch.max(output, dim=1)
             total_loss += loss.item()
-            correct_samples += pred.eq(target).sum()
+            correct_samples += pred.eq(target).sum().item()
 
     avg_loss = total_loss / total_samples
     loss_history = np.append(loss_history, avg_loss)
     accuracy = correct_samples / total_samples
-    accuracy_history = np.append(loss_history, accuracy)
+    accuracy_history = np.append(accuracy_history, accuracy)
     print('\nAverage test loss: ' + '{:.4f}'.format(avg_loss) +
           '  Accuracy:' + '{:5}'.format(correct_samples) + '/' +
           '{:5}'.format(total_samples) + ' (' +
