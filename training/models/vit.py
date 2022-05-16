@@ -20,6 +20,8 @@ class PreNorm(nn.Module):
         self.fn = fn
     def forward(self, x, **kwargs):
         return self.fn(self.norm(x), **kwargs)
+    def get_layer_weights(self):
+        return torch.clone(self.fn.get_attn_weights)
 
 class FeedForward(nn.Module):
     def __init__(self, dim, hidden_dim, dropout = 0.):
@@ -42,9 +44,9 @@ class Attention(nn.Module):
 
         self.heads = heads
         self.scale = dim_head ** -0.5
-
         self.attend = nn.Softmax(dim = -1)
         self.to_qkv = nn.Linear(dim, inner_dim * 3, bias = False)
+        self.attn_weights = 0
 
         self.to_out = nn.Sequential(
             nn.Linear(inner_dim, dim),
@@ -58,10 +60,15 @@ class Attention(nn.Module):
         dots = torch.matmul(q, k.transpose(-1, -2)) * self.scale
 
         attn = self.attend(dots)
+        self.attn_weights = torch.clone(attn)
 
         out = torch.matmul(attn, v)
         out = rearrange(out, 'b h n d -> b n (h d)')
         return self.to_out(out)
+
+    def get_attn_weights(self):
+        return torch.clone(self.attn_weights)
+
 
 class Transformer(nn.Module):
     def __init__(self, dim, depth, heads, dim_head, mlp_dim, dropout = 0.):
@@ -77,6 +84,12 @@ class Transformer(nn.Module):
             x = attn(x) + x
             x = ff(x) + x
         return x
+    def get_attn_weights(self):
+        attn_weights = []
+        for attn, ff in self.layers:
+            attn_weights.append(attn.get_layer_weights())
+        attn_weights = torch.stack(attn_weights).squeeze(1)
+        return attn_weights
 
 class ViT(nn.Module):
     def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool = 'cls', channels=3,
@@ -125,3 +138,6 @@ class ViT(nn.Module):
 
         x = self.to_latent(x)
         return self.mlp_head(x)
+
+    def get_attn_weights(self):
+        return torch.clone(self.transformer.get_attn_weights())

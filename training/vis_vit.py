@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
-parser.add_argument('--dataset', type=str, default="CIFAR-100")
-parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/e2_b100_lr0.001.pt")
+parser.add_argument('--dataset', type=str, default="CIFAR-10")
+parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/CIFAR-10_e100_b100_lr0.0001.pt")
 
 # General
 parser.add_argument('--train_batch', type=int, default=100)
@@ -75,10 +75,12 @@ def main(args):
         plt.imshow(image.permute(1, 2, 0))
         plt.show()
 
-        logits, att_mat = model(image.unsqueeze(0))
-        att_mat = torch.stack(att_mat).squeeze(1)
-        # Average the attention weights across all heads.
-        att_mat = torch.mean(att_mat, dim=1)
+        logits = model(image.unsqueeze(0))
+        attn_map = model.get_attn_weights()
+        print(attn_map.shape)
+        # print(att_mat.shape)
+        # # Average the attention weights across all heads.
+        # att_mat = torch.mean(att_mat, dim=1)
 
 
 

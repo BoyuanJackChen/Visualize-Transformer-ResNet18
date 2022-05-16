@@ -3,7 +3,7 @@ from utils import *
 import time
 import argparse
 import os
-from torch import optim, nn, einsum
+from torch import optim, nn
 import torch.backends.cudnn as cudnn
 import torch.nn.functional as F
 
@@ -104,7 +104,6 @@ def main(args):
         cudnn.benchmark = True
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     criterion = nn.CrossEntropyLoss()
-
     model = model.to(device)
 
     start_epoch = 1
@@ -119,6 +118,7 @@ def main(args):
         train_loss_history = checkpoint['train_loss']
         test_loss_history = checkpoint['test_loss']
         test_accuracy_history = checkpoint['accuracy']
+
     print('==> Training starts')
     for epoch in range(start_epoch, args.epochs + 1):
         start_time = time.time()
@@ -127,8 +127,7 @@ def main(args):
                     train_loader, train_loss_history)
         evaluate_model(model, device, test_loader, test_loss_history,
                        test_accuracy_history)
-        print('Epoch took:', '{:5.2f}'.format(
-            time.time() - start_time), 'seconds')
+        print('Epoch took:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 
         if epoch % args.checkpoint == 0:
             torch.save({
