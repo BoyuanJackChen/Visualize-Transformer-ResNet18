@@ -138,7 +138,7 @@ def main(args):
                 'train_loss': train_loss_history,
                 'test_loss': test_loss_history,
                 'accuracy': test_accuracy_history,
-            }, PATH + f"/{args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt")
+            }, PATH + f"/{args.model}_{args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt")
             print(f"Checkpoint {args.dataset}_e{epoch}_b{args.train_batch}_lr{args.lr}.pt saved")
 
 
