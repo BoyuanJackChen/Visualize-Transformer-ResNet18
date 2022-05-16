@@ -101,9 +101,10 @@ def main(args):
     if device == 'cuda':
         model = torch.nn.DataParallel(model)    # make parallel
         cudnn.benchmark = True
+
+    model = model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     criterion = nn.CrossEntropyLoss()
-    model = model.to(device)
 
     start_epoch = 1
     train_loss_history, test_loss_history, test_accuracy_history = np.array(
@@ -126,7 +127,8 @@ def main(args):
                     train_loader, train_loss_history)
         evaluate_model(model, device, test_loader, test_loss_history,
                        test_accuracy_history)
-        print('Epoch took:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
+        print('Epoch took:', '{:5.2f}'.format(
+            time.time() - start_time), 'seconds')
 
         if epoch % args.checkpoint == 0:
             torch.save({
