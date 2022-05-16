@@ -14,8 +14,7 @@ parser.add_argument('--dataset', type=str, default="CIFAR-10")
 parser.add_argument('--transform', type=str, default="None")
 parser.add_argument('--epochs', type=int, default=2000)
 parser.add_argument('--checkpoint', type=int, default=100)
-parser.add_argument('--load_checkpoint', type=str,
-                    default="../checkpoint/CIFAR-10_e100_b100_lr0.0001.pt")
+parser.add_argument('--load_checkpoint', type=str, default=None)
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 

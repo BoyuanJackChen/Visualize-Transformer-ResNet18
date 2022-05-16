@@ -21,7 +21,7 @@ class PreNorm(nn.Module):
     def forward(self, x, **kwargs):
         return self.fn(self.norm(x), **kwargs)
     def get_layer_weights(self):
-        return torch.clone(self.fn.get_attn_weights)
+        return torch.clone(self.fn.get_attn_weights())
 
 class FeedForward(nn.Module):
     def __init__(self, dim, hidden_dim, dropout = 0.):

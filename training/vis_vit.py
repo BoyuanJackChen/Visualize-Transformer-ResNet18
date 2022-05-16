@@ -7,11 +7,12 @@ from torch import optim, nn, einsum
 import torch.backends.cudnn as cudnn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+import cv2
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
 parser.add_argument('--dataset', type=str, default="CIFAR-10")
-parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/CIFAR-10_e100_b100_lr0.0001.pt")
+parser.add_argument('--load_checkpoint', type=str, default=None)
 
 # General
 parser.add_argument('--train_batch', type=int, default=100)
@@ -73,14 +74,46 @@ def main(args):
         print(image.shape)
         print(target)
         plt.imshow(image.permute(1, 2, 0))
-        plt.show()
+        # plt.show()
 
         logits = model(image.unsqueeze(0))
-        attn_map = model.get_attn_weights()
-        print(attn_map.shape)
-        # print(att_mat.shape)
-        # # Average the attention weights across all heads.
-        # att_mat = torch.mean(att_mat, dim=1)
+        att_mat = model.get_attn_weights()
+        print(f"att_mat has shape {att_mat.shape}")  # [num_layer, num_heads, 17, 17]
+
+        # Average the attention weights across all heads.
+        att_mat = torch.mean(att_mat, dim=1)    # [num_layer, 17, 17]
+
+        # To account for residual connections, we add an identity matrix to the
+        # attention matrix and re-normalize the weights.
+        residual_att = torch.eye(att_mat.size(1))
+        aug_att_mat = att_mat + residual_att
+        aug_att_mat = aug_att_mat / aug_att_mat.sum(dim=-1).unsqueeze(-1)
+        # aug_att_mat has shape [num_layer, 17, 17]
+
+        # Recursively multiply the weight matrices
+        joint_attentions = torch.zeros(aug_att_mat.size())
+        joint_attentions[0] = aug_att_mat[0]
+
+        for n in range(1, aug_att_mat.size(0)):
+            joint_attentions[n] = torch.matmul(aug_att_mat[n], joint_attentions[n - 1])
+        # joint_attentions has shape [num_layer, 17, 17]
+
+        # Attention from the output token to the input space.
+        v = joint_attentions[-1]
+        grid_size = int(np.sqrt(aug_att_mat.size(-1)))
+        mask = v[0, 1:].reshape(grid_size, grid_size).detach().numpy()
+        print(mask.shape)
+        print(mask)
+        print(image.size())
+        mask = cv2.resize(mask / mask.max(), image.size)[..., np.newaxis]
+        result = (mask * image).astype("uint8")
+
+        fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(16, 16))
+        ax1.set_title('Original')
+        ax2.set_title('Attention Map')
+        _ = ax1.imshow(image)
+        _ = ax2.imshow(result)
+        plt.show()
 
 
 
