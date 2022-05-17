@@ -1,0 +1,247 @@
+device is: cuda
+Running on device: Quadro RTX 8000
+==> Loading Dataset..
+==> Building model..
+Model has 1853480 parameters
+==> Training starts
+Epoch: 221
+[    0/34745 (  0%)]  Loss: 0.6245
+[10000/34745 ( 29%)]  Loss: 0.7000
+[20000/34745 ( 57%)]  Loss: 0.5512
+[30000/34745 ( 86%)]  Loss: 0.6048
+
+Average test loss: 12.1878  Accuracy:   65/ 3923 (1.66%)
+
+Epoch took: 836.55 seconds
+Epoch: 222
+[    0/34745 (  0%)]  Loss: 0.6799
+[10000/34745 ( 29%)]  Loss: 0.6407
+[20000/34745 ( 57%)]  Loss: 0.4989
+[30000/34745 ( 86%)]  Loss: 0.6104
+
+Average test loss: 12.2663  Accuracy:   57/ 3923 (1.45%)
+
+Epoch took: 297.18 seconds
+Epoch: 223
+[    0/34745 (  0%)]  Loss: 0.4663
+[10000/34745 ( 29%)]  Loss: 0.5777
+[20000/34745 ( 57%)]  Loss: 0.6231
+[30000/34745 ( 86%)]  Loss: 0.6426
+
+Average test loss: 12.2664  Accuracy:   57/ 3923 (1.45%)
+
+Epoch took: 268.46 seconds
+Epoch: 224
+[    0/34745 (  0%)]  Loss: 0.4766
+[10000/34745 ( 29%)]  Loss: 0.9125
+[20000/34745 ( 57%)]  Loss: 0.6377
+[30000/34745 ( 86%)]  Loss: 0.6737
+
+Average test loss: 12.2911  Accuracy:   52/ 3923 (1.33%)
+
+Epoch took: 277.99 seconds
+Epoch: 225
+[    0/34745 (  0%)]  Loss: 0.7109
+[10000/34745 ( 29%)]  Loss: 0.5641
+[20000/34745 ( 57%)]  Loss: 0.5905
+[30000/34745 ( 86%)]  Loss: 0.4321
+
+Average test loss: 12.3354  Accuracy:   64/ 3923 (1.63%)
+
+Epoch took: 281.21 seconds
+Checkpoint ImageNet_1k_e225_b100_lr0.0001.pt saved
+Epoch: 226
+[    0/34745 (  0%)]  Loss: 0.6350
+[10000/34745 ( 29%)]  Loss: 0.7699
+[20000/34745 ( 57%)]  Loss: 0.4580
+[30000/34745 ( 86%)]  Loss: 0.8272
+
+Average test loss: 12.3355  Accuracy:   58/ 3923 (1.48%)
+
+Epoch took: 297.22 seconds
+Epoch: 227
+[    0/34745 (  0%)]  Loss: 0.4101
+[10000/34745 ( 29%)]  Loss: 0.6385
+[20000/34745 ( 57%)]  Loss: 0.5110
+[30000/34745 ( 86%)]  Loss: 0.6541
+
+Average test loss: 12.3898  Accuracy:   58/ 3923 (1.48%)
+
+Epoch took: 300.65 seconds
+Epoch: 228
+[    0/34745 (  0%)]  Loss: 0.5643
+[10000/34745 ( 29%)]  Loss: 0.5435
+[20000/34745 ( 57%)]  Loss: 0.5359
+[30000/34745 ( 86%)]  Loss: 0.5697
+
+Average test loss: 12.3697  Accuracy:   62/ 3923 (1.58%)
+
+Epoch took: 307.27 seconds
+Epoch: 229
+[    0/34745 (  0%)]  Loss: 0.6060
+[10000/34745 ( 29%)]  Loss: 0.5952
+[20000/34745 ( 57%)]  Loss: 0.6289
+[30000/34745 ( 86%)]  Loss: 0.6079
+
+Average test loss: 12.3983  Accuracy:   59/ 3923 (1.50%)
+
+Epoch took: 341.89 seconds
+Epoch: 230
+[    0/34745 (  0%)]  Loss: 0.5089
+[10000/34745 ( 29%)]  Loss: 0.5014
+[20000/34745 ( 57%)]  Loss: 0.6166
+[30000/34745 ( 86%)]  Loss: 0.5575
+
+Average test loss: 12.4410  Accuracy:   56/ 3923 (1.43%)
+
+Epoch took: 326.46 seconds
+Checkpoint ImageNet_1k_e230_b100_lr0.0001.pt saved
+Epoch: 231
+[    0/34745 (  0%)]  Loss: 0.6360
+[10000/34745 ( 29%)]  Loss: 0.6566
+[20000/34745 ( 57%)]  Loss: 0.5514
+[30000/34745 ( 86%)]  Loss: 0.7578
+
+Average test loss: 12.4710  Accuracy:   66/ 3923 (1.68%)
+
+Epoch took: 283.29 seconds
+Epoch: 232
+[    0/34745 (  0%)]  Loss: 0.5268
+[10000/34745 ( 29%)]  Loss: 0.6550
+[20000/34745 ( 57%)]  Loss: 0.5345
+[30000/34745 ( 86%)]  Loss: 0.6238
+
+Average test loss: 12.5118  Accuracy:   63/ 3923 (1.61%)
+
+Epoch took: 261.65 seconds
+Epoch: 233
+[    0/34745 (  0%)]  Loss: 0.7012
+[10000/34745 ( 29%)]  Loss: 0.3852
+[20000/34745 ( 57%)]  Loss: 0.4647
+[30000/34745 ( 86%)]  Loss: 0.5564
+
+Average test loss: 12.5218  Accuracy:   67/ 3923 (1.71%)
+
+Epoch took: 255.50 seconds
+Epoch: 234
+[    0/34745 (  0%)]  Loss: 0.5170
+[10000/34745 ( 29%)]  Loss: 0.6032
+[20000/34745 ( 57%)]  Loss: 0.6842
+[30000/34745 ( 86%)]  Loss: 0.7588
+
+Average test loss: 12.6132  Accuracy:   65/ 3923 (1.66%)
+
+Epoch took: 257.60 seconds
+Epoch: 235
+[    0/34745 (  0%)]  Loss: 0.5997
+[10000/34745 ( 29%)]  Loss: 0.4755
+[20000/34745 ( 57%)]  Loss: 0.5251
+[30000/34745 ( 86%)]  Loss: 0.7386
+
+Average test loss: 12.5791  Accuracy:   62/ 3923 (1.58%)
+
+Epoch took: 264.57 seconds
+Checkpoint ImageNet_1k_e235_b100_lr0.0001.pt saved
+Epoch: 236
+[    0/34745 (  0%)]  Loss: 0.5845
+[10000/34745 ( 29%)]  Loss: 0.5152
+[20000/34745 ( 57%)]  Loss: 0.5886
+[30000/34745 ( 86%)]  Loss: 0.5529
+
+Average test loss: 12.5908  Accuracy:   63/ 3923 (1.61%)
+
+Epoch took: 295.25 seconds
+Epoch: 237
+[    0/34745 (  0%)]  Loss: 0.6041
+[10000/34745 ( 29%)]  Loss: 0.5041
+[20000/34745 ( 57%)]  Loss: 0.5958
+[30000/34745 ( 86%)]  Loss: 0.3686
+
+Average test loss: 12.6551  Accuracy:   62/ 3923 (1.58%)
+
+Epoch took: 292.19 seconds
+Epoch: 238
+[    0/34745 (  0%)]  Loss: 0.5681
+[10000/34745 ( 29%)]  Loss: 0.5294
+[20000/34745 ( 57%)]  Loss: 0.6301
+[30000/34745 ( 86%)]  Loss: 0.6534
+
+Average test loss: 12.6367  Accuracy:   62/ 3923 (1.58%)
+
+Epoch took: 256.42 seconds
+Epoch: 239
+[    0/34745 (  0%)]  Loss: 0.4996
+[10000/34745 ( 29%)]  Loss: 0.5094
+[20000/34745 ( 57%)]  Loss: 0.4176
+[30000/34745 ( 86%)]  Loss: 0.4807
+
+Average test loss: 12.6913  Accuracy:   69/ 3923 (1.76%)
+
+Epoch took: 244.46 seconds
+Epoch: 240
+[    0/34745 (  0%)]  Loss: 0.4869
+[10000/34745 ( 29%)]  Loss: 0.6556
+[20000/34745 ( 57%)]  Loss: 0.5460
+[30000/34745 ( 86%)]  Loss: 0.5495
+
+Average test loss: 12.7663  Accuracy:   65/ 3923 (1.66%)
+
+Epoch took: 273.91 seconds
+Checkpoint ImageNet_1k_e240_b100_lr0.0001.pt saved
+Epoch: 241
+[    0/34745 (  0%)]  Loss: 0.5573
+[10000/34745 ( 29%)]  Loss: 0.6668
+[20000/34745 ( 57%)]  Loss: 0.6760
+[30000/34745 ( 86%)]  Loss: 0.6164
+
+Average test loss: 12.6876  Accuracy:   55/ 3923 (1.40%)
+
+Epoch took: 301.43 seconds
+Epoch: 242
+[    0/34745 (  0%)]  Loss: 0.6733
+[10000/34745 ( 29%)]  Loss: 0.4200
+[20000/34745 ( 57%)]  Loss: 0.5976
+[30000/34745 ( 86%)]  Loss: 0.5929
+
+Average test loss: 12.7602  Accuracy:   57/ 3923 (1.45%)
+
+Epoch took: 272.30 seconds
+Epoch: 243
+[    0/34745 (  0%)]  Loss: 0.5458
+[10000/34745 ( 29%)]  Loss: 0.3887
+[20000/34745 ( 57%)]  Loss: 0.6539
+[30000/34745 ( 86%)]  Loss: 0.5963
+
+Average test loss: 12.8605  Accuracy:   59/ 3923 (1.50%)
+
+Epoch took: 231.70 seconds
+Epoch: 244
+[    0/34745 (  0%)]  Loss: 0.4603
+[10000/34745 ( 29%)]  Loss: 0.4031
+[20000/34745 ( 57%)]  Loss: 0.6613
+[30000/34745 ( 86%)]  Loss: 0.7274
+
+Average test loss: 12.8031  Accuracy:   62/ 3923 (1.58%)
+
+Epoch took: 228.32 seconds
+Epoch: 245
+[    0/34745 (  0%)]  Loss: 0.5683
+[10000/34745 ( 29%)]  Loss: 0.4853
+[20000/34745 ( 57%)]  Loss: 0.5637
+[30000/34745 ( 86%)]  Loss: 0.5504
+
+Average test loss: 12.8586  Accuracy:   58/ 3923 (1.48%)
+
+Epoch took: 229.84 seconds
+Checkpoint ImageNet_1k_e245_b100_lr0.0001.pt saved
+Epoch: 246
+[    0/34745 (  0%)]  Loss: 0.5563
+[10000/34745 ( 29%)]  Loss: 0.5145
+[20000/34745 ( 57%)]  Loss: 0.4631
+[30000/34745 ( 86%)]  Loss: 0.4868
+
+Average test loss: 12.8694  Accuracy:   60/ 3923 (1.53%)
+
+Epoch took: 237.37 seconds
+Epoch: 247
+slurmstepd: error: *** JOB 19666895 ON gr012 CANCELLED AT 2022-05-17T08:00:50 ***
