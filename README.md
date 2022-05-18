@@ -1,7 +1,5 @@
 # MiniProject2_VisTrans
 
-TODO:
-- Get CIFAR-10, MNIST, ImageNet
-- Decide which VT model (short for vision transformer) we will use
-- Decide which model visualization method we will use
-- Implement the original paper for that model
+- Training: See <training> directory
+- Activation visualization and feature map visualization: See <visualize> directory
+- Representation Similarity: See <torch_cka> directory 
