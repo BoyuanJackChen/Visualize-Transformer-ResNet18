@@ -9,20 +9,19 @@ import torch.nn.functional as F
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default='vit')
-parser.add_argument('--dataset', type=str, default="CIFAR-10")
+parser.add_argument('--dataset', type=str, default="SHVN")
 # --transform=RandomAffine for random translate
 parser.add_argument('--transform', type=str, default="None")
-parser.add_argument('--epochs', type=int, default=2000)
+parser.add_argument('--epochs', type=int, default=200)
 parser.add_argument('--checkpoint', type=int, default=100)
 parser.add_argument('--load_checkpoint', type=str, default=None)
-parser.add_argument('--resume', '-r', action='store_true',
-                    help='resume from checkpoint')
+parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
 
 # General
 parser.add_argument('--lr', default=1e-4, type=float,
                     help='learning rate')  # resnets.. 1e-3, Vit..1e-4?
-parser.add_argument('--train_batch', type=int, default=100)
-parser.add_argument('--test_batch', type=int, default=1000)
+parser.add_argument('--train_batch', type=int, default=10)
+parser.add_argument('--test_batch', type=int, default=100)
 
 # ViT
 parser.add_argument('--dimhead', default="64", type=int)
@@ -30,13 +29,6 @@ parser.add_argument('--dimhead', default="64", type=int)
 # CNN
 parser.add_argument('--convkernel', default='8', type=int)
 
-# Data Augmentation
-parser.add_argument('--aug', action='store_true', help='use randomaug')
-parser.add_argument('--amp', action='store_true', help='enable AMP training')
-parser.add_argument('--mixup', action='store_true',
-                    help='add mixup augumentations')
-parser.add_argument('--bs', default='256')
-parser.add_argument('--size', default="32")
 
 FLAGS = parser.parse_args()
 
@@ -85,6 +77,11 @@ def main(args):
         image_size = 224
         patch_size = 56
         num_classes = 1000
+    elif args.dataset == "SHVN":
+        image_size = 32
+        patch_size = 4
+        num_classes = 10
+
 
     print('==> Building model..')
     if args.model == 'res18':

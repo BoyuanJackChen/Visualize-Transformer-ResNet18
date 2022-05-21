@@ -148,6 +148,17 @@ def get_data_loader(args, train_kwargs, test_kwargs):
             root='../dataImageNet1K/val', transform=transform)
         train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
         test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
+
+    elif args.dataset == "SHVN":
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+        ])
+        trainset = datasets.SVHN(root='./data', split='train', download=True, transform=transform)
+        testset = datasets.SVHN(root='./data', split='test', download=True, transform=transform)
+        train_loader = torch.utils.data.DataLoader(trainset, **test_kwargs)
+        test_loader = torch.utils.data.DataLoader(testset, **train_kwargs)
+
     return train_loader, test_loader
 
 

@@ -1,2 +1,0 @@
-
-ViT attention map visualization code adapted from: https://github.com/jeonsworld/ViT-pytorch/blob/main/visualize_attention_map.ipynb
