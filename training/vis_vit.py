@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 import cv2
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--image_idx', default=2)
-parser.add_argument('--dataset', type=str, default="SVHN")
-parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/vit_SHVN_e100_b10_lr0.0001.pt")
+parser.add_argument('--image_idx', default=10)
+parser.add_argument('--dataset', type=str, default="CIFAR-10")
+parser.add_argument('--load_checkpoint', type=str, default="../checkpoint/vit_CIFAR-10_e500_b100_lr0.0001.pt")
 
 # General
 parser.add_argument('--train_batch', type=int, default=100)
