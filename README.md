@@ -29,7 +29,8 @@ python vis_resnet.py --image_idx=10 --dataset="CIFAR-10" --load_checkpoint="../c
 - The models are stored in ./training/models. main.py and utils.py are for training the models. 
 
 - Representation Similarity: See ./torch_cka 
-To reproduce the results
+
+To reproduce the results:
 ```
 python torch_cka/cka_compare.py --dataset cifar10
 ```
