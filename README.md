@@ -1,4 +1,4 @@
-# ECE7123 Deep Learning Project2 - Understanding Why ViT Doesn’t Perform Well on Small Datasets: An Intuitive Perspective
+# ECE7123 Deep Learning Course Project - Understanding Why ViT Doesn’t Perform Well on Small Datasets: An Intuitive Perspective
 
 - Please first run "python3 ./data/downloader.py" to download CIFAR-10, CIFAR-100 and SVHN, into ./data folder. No need to add parameters to the call, as they are set by default.
 
